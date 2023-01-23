@@ -142,20 +142,31 @@ RCT_EXPORT_METHOD(
   getOpenPort:(RCTPromiseResolveBlock)resolve
   rejecter:(RCTPromiseRejectBlock)reject
 ) {
-  // TODO: For now, let's just hardcode this port, we'll implement the actual
-  // open port detection later.
-  resolve(@(3000));
-/**
-ANDROID/JAVA IMPLEMENTATION OF THE METHOD
-try {
-      ServerSocket socket = new ServerSocket(0);
-      int port = socket.getLocalPort();
-      socket.close();
-      promise.resolve(port);
-    } catch (Exception e) {
-      promise.reject(e);
-    }
-*/
+  int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockfd < 0) {
+    reject(ERROR_DOMAIN, @"Error creating socket", NULL);
+  }
+
+  struct sockaddr_in serv_addr;
+  memset(&serv_addr, 0, sizeof(serv_addr));
+  serv_addr.sin_family = AF_INET;
+  // INADDR_ANY is used to specify that the socket should be bound
+  // to any available network interface.
+  serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  serv_addr.sin_port = 0;
+
+  if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+    reject(ERROR_DOMAIN, @"Error binding socket", NULL);
+  }
+
+  socklen_t len = sizeof(serv_addr);
+  if (getsockname(sockfd, (struct sockaddr *) &serv_addr, &len) < 0) {
+    reject(ERROR_DOMAIN, @"Error getting socket name", NULL);
+  }
+  int port = ntohs(serv_addr.sin_port);
+
+  close(sockfd);
+  resolve(@(port));
 }
 
 - (void) startObserving {
