@@ -32,31 +32,30 @@ RCT_EXPORT_METHOD(
   getLocalIpAddress:(RCTPromiseResolveBlock)resolve
   rejecter:(RCTPromiseRejectBlock)reject
 ) {
-  // TODO: For now, let's just hardcode localhost IP, will do non-local support
-  // later.
-  resolve(@"localhost");
-  /** THIS IS ANDROID/JAVA VERSION OF THE METHOD. CAN WE PORT IT TO IOS?
-     try {
-      Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-      while(en.hasMoreElements()) {
-        NetworkInterface intf = en.nextElement();
-        Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
-        while(enumIpAddr.hasMoreElements()) {
-          InetAddress inetAddress = enumIpAddr.nextElement();
-          if (!inetAddress.isLoopbackAddress()) {
-            String ip = inetAddress.getHostAddress();
-            if(InetAddressUtils.isIPv4Address(ip)) {
-              promise.resolve(ip);
-              return;
-            }
-          }
+  struct ifaddrs *interfaces = NULL; // a linked list of network interfaces
+  struct ifaddrs *temp_addr = NULL;
+  int success = getifaddrs(&interfaces); // get the list of network interfaces
+  if (success == 0) {
+    NSLog(@"Found network interfaces, iterating.");
+    temp_addr = interfaces;
+    while(temp_addr != NULL) {
+      // Check if the current interface is of type AF_INET (IPv4)
+      // and not the loopback interface (lo0)
+      if(temp_addr->ifa_addr->sa_family == AF_INET) {
+        if(!(temp_addr->ifa_flags & IFF_LOOPBACK)) {
+          NSLog(@"Found IPv4 & non-loopback interface. Retrieving IP address.");
+          NSString *ip = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+          resolve(ip);
+          freeifaddrs(interfaces);
+          return;
         }
       }
-      promise.resolve("localhost");
-    } catch (Exception e) {
-      promise.reject(e);
+      temp_addr = temp_addr->ifa_next;
     }
-  */
+  }
+  NSLog(@"Could not find IP address, falling back to localhost.");
+  resolve(@"localhost");
+  freeifaddrs(interfaces);
 }
 
 RCT_EXPORT_METHOD(
