@@ -1,5 +1,8 @@
 #import "FPStaticServer.h"
 #import "Server.h"
+#import <ifaddrs.h>
+#import <arpa/inet.h>
+#include <net/if.h>
 
 static NSString * const ERROR_DOMAIN = @"RNStaticServer";
 static NSString * const EVENT_NAME = @"RNStaticServer";
