@@ -59,6 +59,8 @@ Pod::Spec.new do |s|
     :script => <<-CMD
       set -e
 
+      export PATH="/opt/homebrew/bin:$PATH"
+
       if [[ ${CONFIGURATION} == "Debug" ]]
       then
         LIGHTTPD_CONFIG="Debug"
