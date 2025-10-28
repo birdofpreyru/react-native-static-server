@@ -2464,7 +2464,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ReactNativeStaticServer (0.25.0):
+  - ReactNativeStaticServer (0.26.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2813,7 +2813,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 374f1c9242fbdd673b460d358b33860c0cc9d926
   ReactCommon: 25c7f94aee74ddd93a8287756a8ac0830a309544
   ReactNativeFs: f62f902d6f0269b3a36d747601f136e20179ef70
-  ReactNativeStaticServer: 3050a24797e75cfacf2e224d9ae043d203af2c2a
+  ReactNativeStaticServer: f63a0dd35b8f1ab7f238a26d23d9f7d00bd8ea7a
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: edeb9900b9e5bb5b27b9a6a2d5914e4fe4033c1b
 

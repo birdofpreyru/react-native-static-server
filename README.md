@@ -627,9 +627,9 @@ build process as optional components, which so far has been done only for
       ReactNativeStaticServer_webdav = true
       ```
 
-      **iOS**: Use environment variable `RN_STATIC_SERVER_WEBDAV=1` when
-      installing or updating the pods (_i.e._ when doing `pod install` or
-      `pod update`).
+      **iOS**:  Does not require a special setup &mdash; the pre-compiled xcframework
+      includes the [WebDAV] module with the library, and loaded if opted
+      for by [Server]'s [constructor()].
 
       **macOS (Catalyst)**: The same as for iOS.
 
