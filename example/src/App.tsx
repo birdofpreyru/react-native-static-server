@@ -37,8 +37,8 @@ const AppContent: FunctionComponent = () => {
   const backgroundStyle = {
     backgroundColor: "white",
     flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    gap: 3,
+    margin: 6,
   };
 
   // Once the server is ready, the origin will be set and opened by WebView.
@@ -188,6 +188,12 @@ const AppContent: FunctionComponent = () => {
           }
         }}
         title="Send a message to the WebView content"
+      />
+      <Button
+        onPress={() => {
+          webView.current?.reload();
+        }}
+        title="Reload"
       />
       <View style={styles.webview}>
         <WebView
