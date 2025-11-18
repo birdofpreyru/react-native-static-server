@@ -14,11 +14,20 @@ set(CMAKE_MACOSX_BUNDLE OFF)
 # Pre-build of PCRE2 for the target system from sources.
 
 if(CMAKE_CROSSCOMPILING AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
-  file(
-    COPY ${CMAKE_CURRENT_SOURCE_DIR}/windows/ReactNativeStaticServer/lighttpd/lemon.exe
-    DESTINATION ${CMAKE_BINARY_DIR}/lighttpd1.4/build
+  # Use prebuilt host-side lemon.exe; lighttpd's Ninja build expects
+  # "lighttpd1.4/build/lemon" (no extension) as a dependency and command.
+  # Provide both "lemon.exe" and "lemon" so Ninja's dependency and the
+  # actual invocation both succeed on Windows.
+  set(_LEMON_SRC
+      "${CMAKE_CURRENT_SOURCE_DIR}/windows/ReactNativeStaticServer/lighttpd/lemon.exe"
   )
-  set(LEMON_PATH ${CMAKE_BINARY_DIR}/lighttpd1.4/build/lemon.exe)
+  set(_LEMON_BUILD_DIR "${CMAKE_BINARY_DIR}/lighttpd1.4/build")
+
+  file(MAKE_DIRECTORY "${_LEMON_BUILD_DIR}")
+  file(COPY "${_LEMON_SRC}" DESTINATION "${_LEMON_BUILD_DIR}")
+  file(COPY_FILE "${_LEMON_SRC}" "${_LEMON_BUILD_DIR}/lemon")
+
+  set(LEMON_PATH "${_LEMON_BUILD_DIR}/lemon")
 endif()
 
 # Note: Archs in CMAKE_OSX_ARCHITECTURES are separated by semi-colons,
