@@ -94,6 +94,7 @@ and Windows platforms; powered by [Lighttpd] server.
 [<img width=36 src="https://avatars.githubusercontent.com/u/71085569?s=36" />](https://github.com/Lumentric)
 
 ### [Contributors](https://github.com/birdofpreyru/react-native-static-server/graphs/contributors)
+[<img width=36 src="https://avatars.githubusercontent.com/u/8342701?v=4&s=36" />](https://github.com/SimplyJpk)
 [<img width=36 src="https://avatars.githubusercontent.com/u/62563469?s=36&v=4" />](https://github.com/jole141)
 [<img width=36 src="https://avatars.githubusercontent.com/u/10153413?s=36&v=4" />](https://github.com/exotexot)
 [<img width=36 src="https://avatars.githubusercontent.com/u/10667346?s=36&v=4" />](https://github.com/rafalzawadzki)
