@@ -14,7 +14,7 @@ import {
   unlink,
 } from "@dr.pogodin/react-native-fs";
 
-import { Emitter, Semaphore } from "@dr.pogodin/js-utils";
+import { Emitter, SEC_MS, Semaphore } from "@dr.pogodin/js-utils";
 
 import {
   ERROR_LOG_FILE,
@@ -43,6 +43,22 @@ export type StateListener = (
   details: string,
   error?: Error,
 ) => void;
+
+export type StaticServerParams = {
+  extraConfig?: string;
+  errorLog?: boolean | ErrorLogOptions;
+  fileDir: string;
+  hostname?: string;
+  id?: number;
+
+  /* DEPRECATED */ nonLocal?: boolean;
+
+  port?: number;
+  state?: STATES;
+  stopInBackground?: boolean | number;
+
+  /* DEPRECATED */ webdav?: string[];
+};
 
 nativeEventEmitter.addListener(
   "RNStaticServer",
@@ -94,7 +110,8 @@ class StaticServer {
   /* DEPRECATED */ _nonLocal: boolean;
 
   _origin: string = "";
-  _stopInBackground: boolean;
+  _stopInBackground: boolean | number;
+  _stopTimeoutId?: number;
   _port: number;
 
   _state: STATES;
@@ -178,21 +195,7 @@ class StaticServer {
     stopInBackground = false,
 
     /* DEPRECATED */ webdav,
-  }: {
-    extraConfig?: string;
-    errorLog?: boolean | ErrorLogOptions;
-    fileDir: string;
-    hostname?: string;
-    id?: number;
-
-    /* DEPRECATED */ nonLocal?: boolean;
-
-    port?: number;
-    state?: STATES;
-    stopInBackground?: boolean;
-
-    /* DEPRECATED */ webdav?: string[];
-  }) {
+  }: StaticServerParams) {
     if (errorLog) this._errorLog = errorLog === true ? {} : errorLog;
 
     this._extraConfig = extraConfig;
@@ -230,18 +233,44 @@ class StaticServer {
     return this._stateChangeEmitter.addListener(listener);
   }
 
+  /**
+   * If a delayed server stop is scheduled (by the "stop in background" feature),
+   * it aborts it, and returns "true"; otherwise it does nothing, and returns "false".
+   */
+  _abortScheduledStop(): boolean {
+    if (this._stopTimeoutId === undefined) return false;
+
+    clearTimeout(this._stopTimeoutId);
+    delete this._stopTimeoutId;
+    return true;
+  }
+
+  /**
+   * If the "stop in background" feature is active for this server instance
+   * (i.e. if this server has been started with `stopInBackground` param set),
+   * this function cleans up after this feature (deactivates it) by removing
+   * the corresponding application state listener, and clearing up the pending
+   * stop timer (if any).
+   *
+   * Otherwise, it does nothing.
+   */
+  _cleanUpBackgroundStop() {
+    if (this._appStateSub) {
+      this._appStateSub.remove();
+      delete this._appStateSub;
+      this._abortScheduledStop();
+    }
+  }
+
   _configureAppStateHandling() {
-    if (this._stopInBackground) {
+    if (this._stopInBackground !== undefined) {
       if (!this._appStateSub) {
         this._appStateSub = AppState.addEventListener(
           "change",
           this._handleAppStateChange.bind(this),
         );
       }
-    } else if (this._appStateSub) {
-      this._appStateSub.remove();
-      this._appStateSub = undefined;
-    }
+    } else this._cleanUpBackgroundStop();
   }
 
   async _removeConfigFile() {
@@ -402,18 +431,28 @@ class StaticServer {
    * @returns {Promise<>}
    */
   async stop(details?: string) {
-    if (this._appStateSub) {
-      this._appStateSub.remove();
-      this._appStateSub = undefined;
-    }
+    this._cleanUpBackgroundStop();
     await this._stop(details);
   }
 
   async _handleAppStateChange(appState: AppStateStatus) {
     const starting = appState === "active" || appState === "inactive";
     try {
-      if (starting) await this.start("App entered foreground");
-      else await this._stop("App entered background");
+      if (starting) {
+        // If a delayed server stop has been scheduled, but not yet executed,
+        // we just abort it; otherwise, we start the server.
+        if (!this._abortScheduledStop()) {
+          await this.start("App entered foreground");
+        }
+      } else {
+        if (typeof this._stopInBackground === "number") {
+          const delay = this._stopInBackground;
+          this._stopTimeoutId ??= setTimeout(() => {
+            delete this._stopTimeoutId;
+            this._stop(`App entered background ${delay / SEC_MS} sec ago`);
+          }, delay);
+        } else await this._stop("App entered background");
+      }
     } catch {
       // If anything goes wrong within .start() or ._stop() calls, those methods
       // will move the server into the "CRASHED" state, and they'll notify all

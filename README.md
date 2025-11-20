@@ -788,7 +788,7 @@ within `options` argument:
   if any, in the native layer. By default, the state is initialized
   to `STATES.INACTIVE`.
 
-- `stopInBackground` &mdash; **boolean** &mdash; Optional.
+- `stopInBackground` &mdash; **boolean** | **number** &mdash; Optional.
 
   By default, the server continues to work as usual when its host app enters
   the background / returns to the foreground (better say, by default, it does
@@ -808,6 +808,37 @@ within `options` argument:
   to the server state listeners (see [.addStateListener()]) will have their
   `details` values set equal "_App entered background_",
    and "_App entered foreground_" strings.
+
+  If this parameter is set to a **number** (in milliseconds) the automatic
+  server stop will be scheduled to the given time after the app entered
+  the background. If the app returns to the foreground sooner than the stop was
+  scheduled, the stop will be aborted without interruption of the server,
+  otherwise it will behave similar to the logic described above.
+
+  **BEWARE:** The entire "_stop in the background_" feature is implemented
+  within the TypeScript layer of React Native, and as of the latest RN (v0.82)
+  it effectively behaves differently on different target OS. In my current
+  understanding:
+
+  - On Android the TypeScript layer is stopped right after the app
+    has entered into the background; presumably,
+    - If `stopInBackground` is **true** the native server stops right away,
+      but the corresponding stop events arrive back to the TypeScript layer only
+      after it is reactivated when the app returns to the foreground.
+    - If `stopInBackground` is a **number** that does not work as intended &mdash;
+      the native server will recieve the stop command only when the app returns
+      to the foreground, and then it will stop and start again.
+    - You may not need `stopInBackground` on Android &mdash; it looks to me
+      the local server keeps on working fine across app staying in background
+      for some time.
+
+  - On iOS the TypeScript layer seems to work for some time after the app
+    has entered into the background; and both **true** and **number** values
+    of `stopInBackground` are supposed to work as intended (provided the given
+    **number** is not too long). In my experience, on iOS server does not work
+    across app staying in background for longer times (I guess, iOS closes
+    server ports after some background period), thus `stopInBackground` feature
+    is helpful.
 
 - **DEPRECATED**: `webdav` &mdash; **string[]** &mdash; It still works, but it
   will be removed in future versions. Instead of it use `extraConfig` option to
