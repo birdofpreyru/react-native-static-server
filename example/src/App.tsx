@@ -64,7 +64,11 @@ const AppContent: FunctionComponent = () => {
       // testing.
       port: 3000,
 
-      stopInBackground: true,
+      stopInBackground: Platform.select({
+        android: undefined,
+        ios: 1000,
+        macos: 1000,
+      }),
 
       // These settings enable all available debug options for Lighttpd core,
       // to facilitate library development & testing with the example app.
