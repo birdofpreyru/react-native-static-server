@@ -263,7 +263,12 @@ class StaticServer {
   }
 
   _configureAppStateHandling() {
-    if (this._stopInBackground !== undefined) {
+    if (
+      this._stopInBackground ||
+      // NOTE: Mind, 0 is falsy, but I guess we want it to enable auto-stop with
+      // a zero timeout.
+      typeof this._stopInBackground === "number"
+    ) {
       if (!this._appStateSub) {
         this._appStateSub = AppState.addEventListener(
           "change",
