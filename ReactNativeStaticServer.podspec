@@ -84,9 +84,8 @@ Pod::Spec.new do |s|
           ${BUILT_PRODUCTS_DIR}
     CMD
   }
-  s.source_files = "ios/**/*.{h,m,mm,cpp}"
+  s.source_files = "ios/**/*.{h,m,mm,swift,cpp}"
   s.private_header_files = "ios/**/*.h"
-
 
   s.pod_target_xcconfig    = {
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",

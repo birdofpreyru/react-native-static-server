@@ -1,6 +1,6 @@
 {
   "name": "@dr.pogodin/react-native-static-server",
-  "version": "0.25.3",
+  "version": "0.25.4",
   "description": "Embedded HTTP server for React Native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -54,26 +54,25 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@dr.pogodin/react-native-fs": "^2.36.1",
+    "@dr.pogodin/react-native-fs": "^2.36.2",
     "@eslint/compat": "^2.0.0",
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.39.1",
-    "@react-native-community/cli": "20.0.2",
-    "@react-native/babel-preset": "0.82.1",
-    "@react-native/eslint-config": "^0.82.1",
-    "@react-native/typescript-config": "^0.82.1",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.2",
+    "@react-native/babel-preset": "0.83.0",
+    "@react-native/eslint-config": "^0.83.0",
+    "@react-native/typescript-config": "^0.83.0",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.1.12",
+    "@types/react": "^19.2.0",
     "del-cli": "^7.0.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.2.0",
-    "prettier": "^3.6.2",
-    "react": "19.1.1",
-    "react-native": "0.82.1",
-    "react-native-builder-bob": "^0.40.15",
-    "react-native-windows": "0.80.1",
+    "prettier": "^3.7.4",
+    "react": "19.2.0",
+    "react-native": "0.83.0",
+    "react-native-builder-bob": "^0.40.17",
+    "react-native-windows": "0.80.5",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
@@ -84,14 +83,7 @@
   "workspaces": [
     "example"
   ],
-  "packageManager": "yarn@4.10.3",
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
-  },
+  "packageManager": "yarn@4.12.0",
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
@@ -119,11 +111,14 @@
     }
   },
   "dependencies": {
-    "@dr.pogodin/js-utils": "^0.1.4"
+    "@dr.pogodin/js-utils": "^0.1.5"
   },
   "create-react-native-library": {
-    "languages": "kotlin-objc",
     "type": "turbo-module",
-    "version": "0.54.5"
+    "languages": "kotlin-objc",
+    "tools": [
+      "eslint"
+    ],
+    "version": "0.56.0"
   }
 }
