@@ -5,7 +5,6 @@
 #import <arpa/inet.h>
 #include <net/if.h>
 
-static NSString * const EVENT_NAME = @"RNStaticServer";
 static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
 
 @implementation ReactNativeStaticServer {
@@ -123,8 +122,7 @@ RCT_REMAP_METHOD(start,
     {
       if (signal != LAUNCHED) self->server = nil;
       if (pendingResolve == nil && pendingReject == nil) {
-        [self sendEventWithName:EVENT_NAME
-          body: @{
+        [self emitOnServerEvent: @{
             @"serverId": serverId,
             @"event": signal,
             @"details": details == nil ? @"" : details
@@ -150,10 +148,6 @@ RCT_REMAP_METHOD(start,
     ];
 
     [self->server start];
-}
-
-- (NSArray<NSString *> *)supportedEvents {
-  return @[EVENT_NAME];
 }
 
 RCT_REMAP_METHOD(stop,

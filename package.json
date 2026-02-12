@@ -1,6 +1,6 @@
 {
   "name": "@dr.pogodin/react-native-static-server",
-  "version": "0.25.4",
+  "version": "0.26.0",
   "description": "Embedded HTTP server for React Native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -54,25 +54,23 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@dr.pogodin/react-native-fs": "^2.36.2",
-    "@eslint/compat": "^2.0.0",
+    "@dr.pogodin/react-native-fs": "^2.37.0",
+    "@eslint/compat": "^2.0.2",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
-    "@react-native/babel-preset": "0.83.0",
-    "@react-native/eslint-config": "^0.83.0",
-    "@react-native/typescript-config": "^0.83.0",
+    "@react-native/babel-preset": "0.84.0",
+    "@react-native/eslint-config": "^0.84.0",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.2.0",
+    "@types/react": "^19.2.14",
     "del-cli": "^7.0.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "^5.5.5",
     "jest": "^30.2.0",
-    "prettier": "^3.7.4",
-    "react": "19.2.0",
-    "react-native": "0.83.0",
-    "react-native-builder-bob": "^0.40.17",
-    "react-native-windows": "0.80.5",
+    "prettier": "^3.8.1",
+    "react": "19.2.3",
+    "react-native": "0.84.0",
+    "react-native-builder-bob": "^0.40.18",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
@@ -119,6 +117,6 @@
     "tools": [
       "eslint"
     ],
-    "version": "0.56.0"
+    "version": "0.57.2"
   }
 }

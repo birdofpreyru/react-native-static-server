@@ -8,7 +8,6 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
-import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.lighttpd.Server
 import java.net.InetAddress
 import java.net.NetworkInterface
@@ -97,17 +96,16 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
             return
         }
         pendingPromise = promise
-        val emitter: DeviceEventManagerModule.RCTDeviceEventEmitter = reactApplicationContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
 
         server = Server(id, configPath, errlogPath) { signal, details ->
             if (signal !== Server.LAUNCHED) server = null
             if (pendingPromise == null) {
-                val event = Arguments.createMap()
-                event.putDouble("serverId", id)
-                event.putString("event", signal)
-                event.putString("details", details)
-                emitter.emit("RNStaticServer", event)
+                val event = Arguments.createMap().apply {
+                    putDouble("serverId", id)
+                    putString("event", signal)
+                    putString("details", details)
+                }
+                emitOnServerEvent(event)
             } else {
                 if (signal === Server.CRASHED) {
                     Errors.serverCrashed(id).reject(pendingPromise, details)

@@ -1,5 +1,14 @@
-import type { TurboModule } from "react-native";
-import { TurboModuleRegistry } from "react-native";
+import {
+  type CodegenTypes,
+  type TurboModule,
+  TurboModuleRegistry,
+} from "react-native";
+
+type ServerEventT = {
+  details: string;
+  event: string;
+  serverId: number;
+};
 
 export interface Spec extends TurboModule {
   readonly getConstants: () => {
@@ -12,6 +21,12 @@ export interface Spec extends TurboModule {
   addListener(eventName: string): void;
 
   getActiveServerId(): Promise<number | null>;
+
+  // TODO: We should create separate callbacks for different events
+  // we now send through the same event emitter - that will be better
+  // type safety (the current implementation made sense with legacy
+  // RN versions, not anymore).
+  readonly onServerEvent: CodegenTypes.EventEmitter<ServerEventT>;
 
   removeListeners(count: number): void;
 

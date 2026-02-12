@@ -1,8 +1,7 @@
 import {
   AppState,
   type AppStateStatus,
-  NativeEventEmitter,
-  type NativeEventSubscription,
+  type EventSubscription,
   Platform,
 } from "react-native";
 
@@ -34,8 +33,6 @@ export { STATES, resolveAssetsPath };
 // used to route native events back to JS server objects.
 const servers: { [id: string]: Set<StaticServer> } = {};
 
-const nativeEventEmitter = new NativeEventEmitter(ReactNativeStaticServer);
-
 const LOOPBACK_ADDRESS = "127.0.0.1";
 
 export type StateListener = (
@@ -60,30 +57,25 @@ export type StaticServerParams = {
   /* DEPRECATED */ webdav?: string[];
 };
 
-nativeEventEmitter.addListener(
-  "RNStaticServer",
-  ({ serverId, event, details }) => {
-    const group = servers[serverId];
-    if (group) {
-      switch (event) {
-        case SIGNALS.CRASHED:
-          // TODO: We probably can, and should, capture the native stack trace
-          // and pass it along with the error.
-          const error = Error(details);
+ReactNativeStaticServer.onServerEvent(({ serverId, event, details }) => {
+  const group = servers[serverId];
+  if (group) {
+    switch (event) {
+      case SIGNALS.CRASHED:
+        // TODO: We probably can, and should, capture the native stack trace
+        // and pass it along with the error.
+        const error = Error(details);
 
-          group.forEach((item) =>
-            item._setState(STATES.CRASHED, details, error),
-          );
+        group.forEach((item) => item._setState(STATES.CRASHED, details, error));
 
-          // TODO: Should we do here the following?
-          // delete servers[this._id];
-          break;
-        default:
-          throw Error(`Unexpected signal ${event}`);
-      }
+        // TODO: Should we do here the following?
+        // delete servers[this._id];
+        break;
+      default:
+        throw Error(`Unexpected signal ${event}`);
     }
-  },
-);
+  }
+});
 
 // TODO: The idea for later implementation is to allow users to provide their
 // own lighttpd config files with completely custom configuration. To do so,
@@ -100,7 +92,7 @@ class StaticServer {
   // Babel's @babel/plugin-proposal-private-methods causes many troubles in RN.
   // See: https://github.com/birdofpreyru/react-native-static-server/issues/6
   // and: https://github.com/birdofpreyru/react-native-static-server/issues/9
-  _appStateSub?: NativeEventSubscription;
+  _appStateSub?: EventSubscription;
   _configPath?: string;
   _errorLog?: ErrorLogOptions;
   _extraConfig: string;
@@ -111,7 +103,7 @@ class StaticServer {
 
   _origin: string = "";
   _stopInBackground: boolean | number;
-  _stopTimeoutId?: number;
+  _stopTimeoutId?: NodeJS.Timeout;
   _port: number;
 
   _state: STATES;
