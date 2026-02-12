@@ -19,7 +19,6 @@ RCT_EXPORT_MODULE();
 
 - (void)invalidate
 {
-  [super invalidate];
   if (self->server) {
     [self stop:^void(id){}
       reject:^void(NSString *a,NSString *b, NSError *c){}];
@@ -217,6 +216,9 @@ RCT_REMAP_METHOD(getOpenPort,
     [[RNSSException from:e] reject:reject];
   }
 }
+
+- (void)addListener:(nonnull NSString *)eventName {}
+- (void)removeListeners:(double)count {}
 
 - (void) startObserving {
   // NOOP: Triggered when the first listener from JS side is added.
