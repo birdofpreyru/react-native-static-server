@@ -11,10 +11,11 @@ static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
     Server *server;
 }
 
-RCT_EXPORT_MODULE();
-
-- (instancetype)init {
-  return [super init];
+- (id) init {
+  if (self = [super init]) {
+    // The place to initialize properties.
+  }
+  return self;
 }
 
 - (void)invalidate
@@ -38,17 +39,17 @@ RCT_EXPORT_MODULE();
   return [self constantsToExport];
 }
 
-RCT_REMAP_METHOD(getActiveServerId,
+- (void) getActiveServerId,
                  getActiveServerId:(RCTPromiseResolveBlock) resolve
                  reject:(RCTPromiseRejectBlock)reject
-) {
+{
   resolve(self->server ? self->server.serverId : [NSNull null]);
 }
 
-RCT_REMAP_METHOD(getLocalIpAddress,
+- (void) getLocalIpAddress,
   getLocalIpAddress:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
-) {
+{
   struct ifaddrs *interfaces = NULL; // a linked list of network interfaces
   @try {
     struct ifaddrs *temp_addr = NULL;
@@ -84,13 +85,13 @@ RCT_REMAP_METHOD(getLocalIpAddress,
 RCTPromiseResolveBlock pendingResolve = nil;
 RCTPromiseRejectBlock pendingReject = nil;
 
-RCT_REMAP_METHOD(start,
+- (void) start,
   start:(double)_serverId
   configPath:(NSString*)configPath
   errlogPath:(NSString*)errlogPath
   resolve:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
-) {
+{
     NSLog(@"Starting the server...");
 
     NSNumber *serverId = [NSNumber numberWithDouble:_serverId];
@@ -149,10 +150,10 @@ RCT_REMAP_METHOD(start,
     [self->server start];
 }
 
-RCT_REMAP_METHOD(stop,
+- (void) stop,
   stop:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
-) {
+{
   try {
     if (self->server) {
       NSLog(@"Stopping...");
@@ -176,11 +177,11 @@ RCT_REMAP_METHOD(stop,
   }
 }
 
-RCT_REMAP_METHOD(getOpenPort,
+- (void) getOpenPort,
   getOpenPort:(NSString*) address
   resolve:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
-) {
+{
   @try {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
@@ -237,6 +238,11 @@ RCT_REMAP_METHOD(getOpenPort,
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeReactNativeStaticServerSpecJSI>(params);
+}
+
++ (NSString *)moduleName
+{
+  return @"ReactNativeStaticServer";
 }
 
 @end

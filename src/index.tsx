@@ -103,7 +103,7 @@ class StaticServer {
 
   _origin: string = "";
   _stopInBackground: boolean | number;
-  _stopTimeoutId?: NodeJS.Timeout;
+  _stopTimeoutId?: number;
   _port: number;
 
   _state: STATES;

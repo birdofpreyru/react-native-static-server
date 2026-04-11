@@ -64,10 +64,6 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         }
     }
 
-  override fun getName(): String {
-    return NAME
-  }
-
     @ReactMethod
     override fun start(
             id: Double,  // Server ID for backward communication with JS layer.
@@ -176,7 +172,7 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         // invariant checks, this semaphore is released at those abort points, which
         // are in all cases prior to assigning the pendingPromise value.
         private val sem = Semaphore(1, true)
-        const val NAME = "ReactNativeStaticServer"
+        const val NAME = NativeReactNativeStaticServerSpec.NAME
         const val LOG_TAG = Errors.LOG_TAG + " (Module)"
     }
 }

@@ -16,18 +16,16 @@ class ReactNativeStaticServerPackage : BaseReactPackage() {
     }
   }
 
-  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
-    return ReactModuleInfoProvider {
-      val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
-      moduleInfos[ReactNativeStaticServerModule.NAME] = ReactModuleInfo(
-        ReactNativeStaticServerModule.NAME,
-        ReactNativeStaticServerModule.NAME,
-        canOverrideExistingModule = false,  // canOverrideExistingModule
-        needsEagerInit = false,  // needsEagerInit
-        isCxxModule = false,  // isCxxModule
-        isTurboModule = true // isTurboModule
+  override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
+    mapOf(
+      ReactNativeStaticServerModule.NAME to ReactModuleInfo(
+        name = ReactNativeStaticServerModule.NAME,
+        className = ReactNativeStaticServerModule.NAME,
+        canOverrideExistingModule = false,
+        needsEagerInit = false,
+        isCxxModule = false,
+        isTurboModule = true
       )
-      moduleInfos
-    }
+    )
   }
 }
