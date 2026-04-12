@@ -29,7 +29,7 @@ static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
 - (facebook::react::ModuleConstants<JS::NativeReactNativeStaticServer::Constants>) constantsToExport {
   return facebook::react::typedConstants<JS::NativeReactNativeStaticServer::Constants>({
     .CRASHED = CRASHED,
-    .IS_MAC_CATALYST = @(TARGET_OS_MACCATALYST),
+    .IS_MAC_CATALYST = TARGET_OS_MACCATALYST,
     .LAUNCHED = LAUNCHED,
     .TERMINATED = TERMINATED
   });
@@ -39,15 +39,13 @@ static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
   return [self constantsToExport];
 }
 
-- (void) getActiveServerId,
-                 getActiveServerId:(RCTPromiseResolveBlock) resolve
+- (void) getActiveServerId:(RCTPromiseResolveBlock) resolve
                  reject:(RCTPromiseRejectBlock)reject
 {
   resolve(self->server ? self->server.serverId : [NSNull null]);
 }
 
-- (void) getLocalIpAddress,
-  getLocalIpAddress:(RCTPromiseResolveBlock)resolve
+- (void) getLocalIpAddress:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
 {
   struct ifaddrs *interfaces = NULL; // a linked list of network interfaces
@@ -85,8 +83,7 @@ static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
 RCTPromiseResolveBlock pendingResolve = nil;
 RCTPromiseRejectBlock pendingReject = nil;
 
-- (void) start,
-  start:(double)_serverId
+- (void) start:(double)_serverId
   configPath:(NSString*)configPath
   errlogPath:(NSString*)errlogPath
   resolve:(RCTPromiseResolveBlock)resolve
@@ -150,8 +147,7 @@ RCTPromiseRejectBlock pendingReject = nil;
     [self->server start];
 }
 
-- (void) stop,
-  stop:(RCTPromiseResolveBlock)resolve
+- (void) stop:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
 {
   try {
@@ -177,8 +173,7 @@ RCTPromiseRejectBlock pendingReject = nil;
   }
 }
 
-- (void) getOpenPort,
-  getOpenPort:(NSString*) address
+- (void) getOpenPort:(NSString*) address
   resolve:(RCTPromiseResolveBlock)resolve
   reject:(RCTPromiseRejectBlock)reject
 {
