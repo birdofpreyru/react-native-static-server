@@ -26,16 +26,16 @@ static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
   }
 }
 
-- (NSDictionary*) constantsToExport {
-  return @{
-    @"CRASHED": CRASHED,
-    @"IS_MAC_CATALYST": @(TARGET_OS_MACCATALYST),
-    @"LAUNCHED": LAUNCHED,
-    @"TERMINATED": TERMINATED
-  };
+- (facebook::react::ModuleConstants<JS::NativeReactNativeStaticServer::Constants>) constantsToExport {
+  return facebook::react::typedConstants<JS::NativeReactNativeStaticServer::Constants>({
+    .CRASHED = CRASHED,
+    .IS_MAC_CATALYST = @(TARGET_OS_MACCATALYST),
+    .LAUNCHED = LAUNCHED,
+    .TERMINATED = TERMINATED
+  });
 }
 
-- (NSDictionary*) getConstants {
+- (facebook::react::ModuleConstants<JS::NativeReactNativeStaticServer::Constants>) getConstants {
   return [self constantsToExport];
 }
 

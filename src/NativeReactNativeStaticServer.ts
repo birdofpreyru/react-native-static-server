@@ -11,7 +11,7 @@ type ServerEventT = {
 };
 
 export interface Spec extends TurboModule {
-  readonly getConstants: () => {
+  getConstants(): {
     CRASHED: string;
     IS_MAC_CATALYST: boolean;
     LAUNCHED: string;
