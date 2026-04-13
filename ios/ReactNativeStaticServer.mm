@@ -36,7 +36,12 @@ static dispatch_semaphore_t sem = dispatch_semaphore_create(1);
 }
 
 - (facebook::react::ModuleConstants<JS::NativeReactNativeStaticServer::Constants>) getConstants {
-  return [self constantsToExport];
+  // NOTE: Although the explicit type cast below seems unnecessary,
+  // it has been reported that without it the library build fails for Expo,
+  // thus let's have it here for the foreseeable future;
+  // see: https://github.com/birdofpreyru/react-native-static-server/issues/159#issuecomment-4233452161,
+  // and https://github.com/birdofpreyru/react-native-fs/issues/139
+  return (facebook::react::ModuleConstants<JS::NativeReactNativeStaticServer::Constants>)[self constantsToExport];
 }
 
 - (void) getActiveServerId:(RCTPromiseResolveBlock) resolve

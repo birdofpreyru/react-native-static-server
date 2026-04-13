@@ -1860,7 +1860,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - ReactNativeStaticServer (0.26.1):
+  - ReactNativeStaticServer (0.26.2):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2197,7 +2197,7 @@ SPEC CHECKSUMS:
   ReactCommon: fe2a3af8975e63efa60f95fca8c34dc85deee360
   ReactNativeDependencies: 15d0db96700d898a5d1f7cf5bd04718638767238
   ReactNativeFs: 21026144ac71a65acf6855c52b1a8eb31012bb5d
-  ReactNativeStaticServer: 871a491cd41e919e427fc21f3e43b956239f8fc9
+  ReactNativeStaticServer: 4378bf45f01eb353886c00864ad62c74528e4e64
   Yoga: e83c3121d079541e69f3c5c623faaaf933fb5812
 
 PODFILE CHECKSUM: b47600f8d2cd5d18654e08384a278de07d00e061
