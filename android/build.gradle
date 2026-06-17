@@ -2,8 +2,7 @@ buildscript {
   ext.ReactNativeStaticServer = [
     kotlinVersion: "2.0.21",
     minSdkVersion: 24,
-    compileSdkVersion: 36,
-    targetSdkVersion: 36
+    compileSdkVersion: 36
   ]
 
   ext.getExtOrDefault = { prop ->
@@ -39,7 +38,6 @@ android {
 
   defaultConfig {
     minSdkVersion getExtOrDefault("minSdkVersion")
-    targetSdkVersion getExtOrDefault("targetSdkVersion")
     externalNativeBuild {
       cmake {
         arguments "-DWITH_ANDROID_NDK_SYSLOG_INTERCEPT=ON", "-DWITH_JAVA_NATIVE_INTERFACE=ON", "-DBUILD_STATIC=ON",
@@ -58,24 +56,15 @@ android {
     }
   }
 
-  buildFeatures {
-    buildConfig true
-  }
-
   buildTypes {
     release {
-      minifyEnabled false
       consumerProguardFiles "proguard-rules.pro"
     }
   }
 
-  lint {
-    disable "GradleCompatible"
-  }
-
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
   }
 }
 

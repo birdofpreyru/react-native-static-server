@@ -34,10 +34,8 @@ On **iOS**:
   - Install pods:
     ```sh
     cd example/ios
-    RCT_NEW_ARCH_ENABLED=1 pod install
+    pod install
     ```
-    Here `RCT_NEW_ARCH_ENABLED=1` is optional, omit it to build for the old RN
-    architecture.
 
   - Then open, build, and run the example project in XCode.
 
