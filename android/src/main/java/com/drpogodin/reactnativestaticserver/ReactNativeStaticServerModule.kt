@@ -6,15 +6,12 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.module.annotations.ReactModule
 import com.lighttpd.Server
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.ServerSocket
 import java.util.concurrent.Semaphore
 
-@ReactModule(name = ReactNativeStaticServerModule.NAME)
 class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
   NativeReactNativeStaticServerSpec(reactContext), LifecycleEventListener {
     // The currently active server instance. We assume only single server instance
@@ -35,12 +32,10 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         return constants
     }
 
-    @ReactMethod
     override fun getActiveServerId(promise: Promise) {
       promise.resolve(server?.id)
     }
 
-    @ReactMethod
     override fun getLocalIpAddress(promise: Promise) {
         try {
             val en = NetworkInterface.getNetworkInterfaces()
@@ -64,7 +59,6 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    @ReactMethod
     override fun start(
             id: Double,  // Server ID for backward communication with JS layer.
             configPath: String,
@@ -113,7 +107,6 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         server!!.start()
     }
 
-    @ReactMethod
     override fun getOpenPort(address: String, promise: Promise) {
         try {
             val socket = ServerSocket(
@@ -126,7 +119,6 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    @ReactMethod
     override fun stop(promise: Promise?) {
         Log.i(LOG_TAG, "stop() triggered")
         try {
@@ -146,12 +138,10 @@ class ReactNativeStaticServerModule(reactContext: ReactApplicationContext) :
         server!!.interrupt()
     }
 
-    @ReactMethod
     override fun addListener(eventName: String?) {
         // NOOP
     }
 
-    @ReactMethod
     override fun removeListeners(count: Double) {
         // NOOP
     }
