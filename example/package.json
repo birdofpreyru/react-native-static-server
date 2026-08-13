@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "@dr.pogodin/react-native-fs": "^2.39.2",
-    "@dr.pogodin/react-native-webview": "^16.0.0",
+    "@dr.pogodin/react-native-webview": "^16.1.0",
     "react": "19.2.3",
-    "react-native": "0.86.2",
-    "react-native-safe-area-context": "^5.8.1"
+    "react-native": "0.87.0",
+    "react-native-safe-area-context": "^5.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -24,13 +24,12 @@
     "@react-native-community/cli": "20.2.0",
     "@react-native-community/cli-platform-android": "20.2.0",
     "@react-native-community/cli-platform-ios": "20.2.0",
-    "@react-native/babel-preset": "0.86.2",
-    "@react-native/jest-preset": "0.86.2",
-    "@react-native/metro-config": "0.86.2",
-    "@react-native/typescript-config": "0.86.2",
+    "@react-native/babel-preset": "0.87.0",
+    "@react-native/metro-config": "0.87.0",
+    "@react-native/typescript-config": "0.87.0",
     "@types/react": "^19.2.18",
-    "react-native-builder-bob": "^0.42.1",
-    "react-native-monorepo-config": "^0.3.5"
+    "react-native-builder-bob": "^0.43.0",
+    "react-native-monorepo-config": "^0.4.0"
   },
   "engines": {
     "node": ">=22.11.0"

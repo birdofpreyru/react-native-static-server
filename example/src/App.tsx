@@ -170,10 +170,7 @@ const AppContent: FunctionComponent = () => {
         paddingTop: insets.top,
       }}
     >
-      <StatusBar
-        barStyle={isDarkMode ? "light-content" : "dark-content"}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <Text style={styles.title}>React Native Static Server Example</Text>
       <Text>
         The &lt;WebView&gt; component below this text displays a sample, styled
