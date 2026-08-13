@@ -122,7 +122,9 @@ RCTPromiseRejectBlock pendingReject = nil;
     SignalConsumer signalConsumer = ^void(NSString * const signal,
                                           NSString * const details)
     {
-      if (signal != LAUNCHED) self->server = nil;
+      const BOOL launched = [signal isEqualToString:LAUNCHED];
+      const BOOL crashed = [signal isEqualToString:CRASHED];
+      if (!launched) self->server = nil;
       if (pendingResolve == nil && pendingReject == nil) {
         [self emitOnServerEvent: @{
             @"serverId": serverId,
@@ -131,14 +133,19 @@ RCTPromiseRejectBlock pendingReject = nil;
           }
         ];
       } else {
-        if (signal == CRASHED) {
-          NSString *name = [NSString stringWithFormat:@"Server #%@ crashed", serverId];
-          [[RNSSException name:name details:details]
-           reject:pendingReject];
-        } else pendingResolve(details);
+        RCTPromiseResolveBlock resolve = pendingResolve;
+        RCTPromiseRejectBlock reject = pendingReject;
         pendingResolve = nil;
         pendingReject = nil;
-        dispatch_semaphore_signal(sem);
+        dispatch_async(dispatch_get_main_queue(), ^{
+          if (crashed) {
+            NSString *name = [NSString stringWithFormat:@"Server #%@ crashed", serverId];
+            [[RNSSException name:name details:details] reject:reject];
+          } else {
+            resolve(details);
+          }
+          dispatch_semaphore_signal(sem);
+        });
       }
     };
 
